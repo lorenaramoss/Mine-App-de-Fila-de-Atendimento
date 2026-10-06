@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Histórico</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Histórico de Atendimentos</h1>
+
+        <section class="card">
+
+            {% if atendimentos %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nome</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                            <th>Data</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for atendimento in atendimentos %}
+
+                        <tr>
+
+                            <td>
+                                {{ atendimento["nome"] }}
+                            </td>
+
+                            <td>
+                                {{ atendimento["prioridade"] }}
+                            </td>
+
+                            <td>
+                                {{ atendimento["status"] }}
+                            </td>
+
+                            <td>
+                                {{ atendimento["data_hora"] }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>
+                    Nenhum atendimento finalizado ainda.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+        <a
+            class="btn voltar"
+            href="/"
+        >
+            Voltar para a fila
+        </a>
+
+    </div>
+
+</body>
+
+</html>

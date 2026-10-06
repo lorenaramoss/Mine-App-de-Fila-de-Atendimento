@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fila de Atendimento</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Fila de Atendimento</h1>
+
+        <!-- Cadastro -->
+        <section class="card">
+
+            <h2>Cadastrar Cliente</h2>
+
+            <form action="/cadastrar" method="POST">
+
+                <input
+                    type="text"
+                    name="nome"
+                    placeholder="Nome do cliente"
+                    required
+                >
+
+                <select name="prioridade">
+
+                    <option value="Normal">
+                        Normal
+                    </option>
+
+                    <option value="Preferencial">
+                        Preferencial
+                    </option>
+
+                </select>
+
+                <button type="submit">
+                    Adicionar à fila
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Cliente sendo atendido -->
+        <section class="card">
+
+            <h2>Em Atendimento</h2>
+
+            {% if atendimento %}
+
+                <div class="atual">
+
+                    <h3>{{ atendimento["nome"] }}</h3>
+
+                    <p>
+                        Prioridade:
+                        <strong>
+                            {{ atendimento["prioridade"] }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Status:
+                        <strong>
+                            {{ atendimento["status"] }}
+                        </strong>
+                    </p>
+
+                    <a
+                        class="btn concluir"
+                        href="/concluir/{{ atendimento['id'] }}"
+                    >
+                        Concluir Atendimento
+                    </a>
+
+                    <a
+                        class="btn cancelar"
+                        href="/cancelar/{{ atendimento['id'] }}"
+                    >
+                        Cancelar
+                    </a>
+
+                </div>
+
+            {% else %}
+
+                <p>Nenhum cliente em atendimento.</p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- Fila -->
+        <section class="card">
+
+            <div class="titulo-fila">
+
+                <h2>Fila de Espera</h2>
+
+                <a
+                    class="btn chamar"
+                    href="/chamar"
+                >
+                    Chamar Próximo
+                </a>
+
+            </div>
+
+
+            {% if fila %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Posição</th>
+                            <th>Nome</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for cliente in fila %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ cliente["nome"] }}
+                            </td>
+
+                            <td>
+                                {% if cliente["prioridade"] == "Preferencial" %}
+                                    <span class="preferencial">
+                                        Preferencial
+                                    </span>
+                                {% else %}
+                                    Normal
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {{ cliente["status"] }}
+                            </td>
+
+                            <td>
+
+                                <a
+                                    class="btn cancelar"
+                                    href="/cancelar/{{ cliente['id'] }}"
+                                >
+                                    Cancelar
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p>A fila está vazia.</p>
+
+            {% endif %}
+
+        </section>
+
+
+        <a
+            class="historico-link"
+            href="/historico"
+        >
+            Ver Histórico de Atendimentos
+        </a>
+
+    </div>
+
+</body>
+
+</html>
